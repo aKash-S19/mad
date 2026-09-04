@@ -50,22 +50,26 @@ class EpubParserService {
       final epubBook = await EpubReader.readBook(bytes);
 
       final chapters = _extractChapters(epubBook);
+      final metadata = epubBook.Schema?.Package?.Metadata;
 
+      final coverBytes = _extractCoverBytes(epubBook);
       String? coverPath;
-      if (epubBook.CoverImage != null) {
-        coverPath = await _saveCoverToTemp(
-          epubBook.CoverImage!.content!,
-        );
+      if (coverBytes != null) {
+        coverPath = await _saveCoverToTemp(coverBytes);
       }
 
       return EpubData(
         title: epubBook.Title,
         author: epubBook.Author,
-        description: epubBook.Schema?.Package?.Description,
-        publisher: epubBook.Schema?.Package?.Publisher,
-        language: epubBook.Schema?.Package?.Language,
+        description: metadata?.Description,
+        publisher: metadata?.Publishers?.isNotEmpty == true
+            ? metadata!.Publishers!.first
+            : null,
+        language: metadata?.Languages?.isNotEmpty == true
+            ? metadata!.Languages!.first
+            : null,
         chapters: chapters,
-        coverImageBytes: epubBook.CoverImage?.content,
+        coverImageBytes: coverBytes,
         coverImagePath: coverPath,
       );
     } catch (e) {
@@ -126,7 +130,7 @@ class EpubParserService {
     try {
       final bytes = await File(filePath).readAsBytes();
       final epubBook = await EpubReader.readBook(bytes);
-      return epubBook.CoverImage?.content;
+      return _extractCoverBytes(epubBook);
     } catch (e) {
       debugPrint('EpubParserService: extractCover error: $e');
       return null;
@@ -138,17 +142,38 @@ class EpubParserService {
     try {
       final bytes = await File(filePath).readAsBytes();
       final epubBook = await EpubReader.readBook(bytes);
+      final metadata = epubBook.Schema?.Package?.Metadata;
 
       return EpubData(
         title: epubBook.Title,
         author: epubBook.Author,
-        description: epubBook.Schema?.Package?.Description,
-        publisher: epubBook.Schema?.Package?.Publisher,
-        language: epubBook.Schema?.Package?.Language,
+        description: metadata?.Description,
+        publisher: metadata?.Publishers?.isNotEmpty == true
+            ? metadata!.Publishers!.first
+            : null,
+        language: metadata?.Languages?.isNotEmpty == true
+            ? metadata!.Languages!.first
+            : null,
       );
     } catch (e) {
       debugPrint('EpubParserService: extractMetadata error: $e');
       return const EpubData();
+    }
+  }
+
+  static List<int>? _extractCoverBytes(EpubBook epubBook) {
+    final images = epubBook.Content?.Images;
+    if (images == null || images.isEmpty) return null;
+
+    try {
+      final coverEntry = images.entries.firstWhere(
+        (e) => e.key.toLowerCase().contains('cover'),
+        orElse: () => images.entries.first,
+      );
+      return coverEntry.value.Content;
+    } catch (e) {
+      debugPrint('EpubParserService: _extractCoverBytes error: $e');
+      return images.entries.first.value.Content;
     }
   }
 
@@ -189,7 +214,6 @@ class EpubParserService {
       List<dynamic> epubChapters, List<Chapter> chapters, int order) {
     for (final ch in epubChapters) {
       final title = ch.Title ?? 'Untitled';
-      final htmlContent = ch.HtmlContent ?? '';
       final href = _uuid.v4();
 
       chapters.add(Chapter(
@@ -207,68 +231,6 @@ class EpubParserService {
     }
   }
 
-  /// Parses EPUB 3 navigation (X)HTML content for chapter list.
-  static List<Chapter> _parseNavContent(String navHtml) {
-    final chapters = <Chapter>[];
-
-    // Simple regex-based extraction of nav links
-    // Pattern: <a href="...">Title</a>
-    final navLinkPattern =
-        RegExp(r'<a\s+[^>]*href="([^"]*)"[^>]*>(.*?)</a>',
-            caseSensitive: false, dotAll: true);
-
-    var order = 0;
-    for (final match in navLinkPattern.allMatches(navHtml)) {
-      final href = match.group(1) ?? '';
-      final titleHtml = match.group(2) ?? '';
-      final title = _stripHtmlTags(titleHtml).trim();
-
-      if (title.isNotEmpty && href.isNotEmpty) {
-        chapters.add(Chapter(
-          id: _uuid.v4(),
-          title: title,
-          href: href,
-          order: order,
-          level: 0,
-        ));
-        order++;
-      }
-    }
-
-    return chapters;
-  }
-
-  /// Parses NCX (EPUB 2 table of contents) XML for chapter list.
-  static List<Chapter> _parseNcxContent(String ncxXml) {
-    final chapters = <Chapter>[];
-
-    // Pattern: <navPoint> ... <text>Title</text> ... <content src="..."/>
-    final navPointPattern = RegExp(
-        r'<navPoint[^>]*>.*?<text>(.*?)</text>.*?<content\s+src="([^"]*)"[^>]*/>.*?</navPoint>',
-        caseSensitive: false,
-        dotAll: true);
-
-    var order = 0;
-    for (final match in navPointPattern.allMatches(ncxXml)) {
-      final title = _stripHtmlTags(match.group(1) ?? '').trim();
-      final src = match.group(2) ?? '';
-
-      if (title.isNotEmpty) {
-        chapters.add(Chapter(
-          id: _uuid.v4(),
-          title: title,
-          href: src,
-          order: order,
-          level: 0,
-        ));
-        order++;
-      }
-    }
-
-    return chapters;
-  }
-
-  /// Extracts the <title> tag content from an HTML string.
   static String? _extractTitleFromHtml(String html) {
     final titlePattern =
         RegExp(r'<title[^>]*>(.*?)</title>',

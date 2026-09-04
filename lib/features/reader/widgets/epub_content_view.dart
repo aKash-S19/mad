@@ -254,10 +254,6 @@ class _EpubContentViewState extends State<EpubContentView> {
     }
   }
 
-  FontWeight _mapFontWeight(String fontFamily) {
-    return FontWeight.w400;
-  }
-
   String? _resolveFontFamily() {
     switch (widget.fontFamily) {
       case 'Serif':
@@ -281,9 +277,6 @@ class _EpubContentViewState extends State<EpubContentView> {
 
   @override
   Widget build(BuildContext context) {
-    final textColor = widget.themeColors.textColor;
-    final accent = widget.themeColors.accentColor;
-
     return GestureDetector(
       onHorizontalDragEnd: (details) {
         if (details.primaryVelocity == null) return;

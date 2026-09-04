@@ -34,7 +34,7 @@ void main() async {
   await DatabaseHelper.instance.database;
 
   // Initialize SharedPreferences for settings
-  final prefs = await SharedPreferences.getInstance();
+  await SharedPreferences.getInstance();
 
   runApp(
     MultiProvider(

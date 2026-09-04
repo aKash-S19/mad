@@ -26,9 +26,7 @@ class AppTheme {
   static const Color _primaryDark = Color(0xFF4DB6AC);
 
   /// Warm cream/sand background tones for a library feel.
-  static const Color _warmBgLight = Color(0xFFFAF6F0);
   static const Color _warmSurfaceLight = Color(0xFFFFFFFF);
-  static const Color _warmBgDark = Color(0xFF121416);
   static const Color _warmSurfaceDark = Color(0xFF1B1E21);
 
   /// Secondary accent — a warm amber for highlights/CTA emphasis.

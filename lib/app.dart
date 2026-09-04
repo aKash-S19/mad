@@ -16,7 +16,6 @@ class LiboraApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final settings = context.watch<SettingsProvider>();
-    final auth = context.watch<AuthProvider>();
 
     return MaterialApp(
       title: 'Libora',
@@ -163,10 +162,6 @@ class _MainShell extends StatefulWidget {
 
 class _MainShellState extends State<_MainShell> {
   int _currentIndex = 0;
-
-  final _screens = [
-    // Will be filled with actual screens
-  ];
 
   @override
   Widget build(BuildContext context) {

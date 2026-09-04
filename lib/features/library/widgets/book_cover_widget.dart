@@ -227,8 +227,7 @@ class _FallbackCover extends StatelessWidget {
     final colours = [
       scheme.primary.withValues(alpha: 0.8),
       scheme.secondary.withValues(alpha: 0.7),
-      scheme.tertiary?.withValues(alpha: 0.7) ??
-          scheme.primary.withValues(alpha: 0.6),
+      scheme.tertiary.withValues(alpha: 0.7),
       scheme.primaryContainer,
       scheme.secondaryContainer,
     ];

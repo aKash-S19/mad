@@ -237,7 +237,9 @@ class ReaderProvider extends ChangeNotifier {
   Future<void> getTOC() async {
     if (_currentBook == null) return;
     if (_currentBook!.fileType != BookFileType.epub ||
-        _currentBook!.filePath == null) return;
+        _currentBook!.filePath == null) {
+      return;
+    }
 
     try {
       final epubData =

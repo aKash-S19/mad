@@ -111,7 +111,7 @@ class QuotesProvider extends ChangeNotifier {
   /// Returns quotes for a specific book.
   Future<List<Quote>> getQuotesByBook(String bookId) async {
     try {
-      return _db.getQuotesByBook(bookId);
+      return await _db.getQuotesByBook(bookId);
     } catch (e) {
       _error = 'Failed to get quotes by book: $e';
       debugPrint('QuotesProvider: getQuotesByBook error: $e');
@@ -123,7 +123,7 @@ class QuotesProvider extends ChangeNotifier {
   /// Returns favorite quotes only.
   Future<List<Quote>> getFavoriteQuotes() async {
     try {
-      return _db.getFavoriteQuotes();
+      return await _db.getFavoriteQuotes();
     } catch (e) {
       _error = 'Failed to get favorite quotes: $e';
       debugPrint('QuotesProvider: getFavoriteQuotes error: $e');

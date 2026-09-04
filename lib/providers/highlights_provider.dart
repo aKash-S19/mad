@@ -93,7 +93,7 @@ class HighlightsProvider extends ChangeNotifier {
   /// Returns highlights for a specific book.
   Future<List<Highlight>> getHighlightsByBook(String bookId) async {
     try {
-      return _db.getHighlightsByBook(bookId);
+      return await _db.getHighlightsByBook(bookId);
     } catch (e) {
       _error = 'Failed to get highlights by book: $e';
       debugPrint('HighlightsProvider: getHighlightsByBook error: $e');
@@ -105,7 +105,7 @@ class HighlightsProvider extends ChangeNotifier {
   /// Returns recent highlights across all books.
   Future<List<Highlight>> getRecentHighlights({int limit = 20}) async {
     try {
-      return _db.getRecentHighlights(limit: limit);
+      return await _db.getRecentHighlights(limit: limit);
     } catch (e) {
       _error = 'Failed to get recent highlights: $e';
       debugPrint('HighlightsProvider: getRecentHighlights error: $e');

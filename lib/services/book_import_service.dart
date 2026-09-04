@@ -95,7 +95,7 @@ class BookImportService {
       // Copy file to app storage
       final savedPath = await _copyToAppStorage(
         filePath,
-        '$fileName_${_uuid.v4()}.pdf',
+        '${fileName}_${_uuid.v4()}.pdf',
       );
 
       // Try to parse title and author from filename
@@ -143,7 +143,8 @@ class BookImportService {
 
       final title = epubBook.Title;
       final author = epubBook.Author;
-      final description = epubBook.Schema?.Package?.Description;
+      final metadata = epubBook.Schema?.Package?.Metadata;
+      final description = metadata?.Description;
 
       int chapterCount = 0;
       if (epubBook.Content?.Html != null) {
@@ -151,8 +152,13 @@ class BookImportService {
       }
 
       List<int>? coverBytes;
-      if (epubBook.CoverImage != null) {
-        coverBytes = epubBook.CoverImage!.content;
+      final images = epubBook.Content?.Images;
+      if (images != null && images.isNotEmpty) {
+        final coverEntry = images.entries.firstWhere(
+          (e) => e.key.toLowerCase().contains('cover'),
+          orElse: () => images.entries.first,
+        );
+        coverBytes = coverEntry.value.Content;
       }
 
       return _EpubMetadata(
@@ -178,7 +184,15 @@ class BookImportService {
     try {
       final bytes = await File(filePath).readAsBytes();
       final epubBook = await EpubReader.readBook(bytes);
-      return epubBook.CoverImage?.content;
+      final images = epubBook.Content?.Images;
+      if (images != null && images.isNotEmpty) {
+        final coverEntry = images.entries.firstWhere(
+          (e) => e.key.toLowerCase().contains('cover'),
+          orElse: () => images.entries.first,
+        );
+        return coverEntry.value.Content;
+      }
+      return null;
     } catch (e) {
       debugPrint('BookImportService: extractEpubCover error: $e');
       return null;

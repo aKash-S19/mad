@@ -170,10 +170,10 @@ class QuoteCardService {
                 children: [
                   Row(
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.menu_book,
                         size: 16,
-                        color: const Color(0xFFE94560),
+                        color: Color(0xFFE94560),
                       ),
                       const SizedBox(width: 6),
                       Text(

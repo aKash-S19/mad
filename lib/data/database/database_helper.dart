@@ -8,7 +8,6 @@ library;
 
 import 'package:path/path.dart' as p;
 import 'package:sqflite/sqflite.dart';
-import 'package:sqflite/sqlite_api.dart';
 
 import '../models/book_model.dart';
 import '../models/bookmark_model.dart';

@@ -88,7 +88,7 @@ class NotesProvider extends ChangeNotifier {
   /// Returns notes for a specific book.
   Future<List<Note>> getNotesByBook(String bookId) async {
     try {
-      return _db.getNotesByBook(bookId);
+      return await _db.getNotesByBook(bookId);
     } catch (e) {
       _error = 'Failed to get notes by book: $e';
       debugPrint('NotesProvider: getNotesByBook error: $e');

@@ -1,14 +1,10 @@
-import 'dart:ui';
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:libora/data/models/book_model.dart';
 import 'package:libora/data/models/highlight_model.dart';
 import 'package:libora/data/models/quote_model.dart';
-import 'package:libora/data/models/note_model.dart';
 import 'package:libora/core/utils/date_formatter.dart';
 import 'package:libora/core/utils/validators.dart';
 import 'package:libora/core/theme/reader_theme.dart' as rt;
-import 'package:libora/providers/settings_provider.dart';
 
 void main() {
   group('Book Model Tests', () {

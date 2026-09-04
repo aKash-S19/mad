@@ -70,7 +70,7 @@ class AuthorStat {
 
 class ReadingStatsService {
   final DatabaseHelper _db = DatabaseHelper();
-  static const Uuid _uuid = const Uuid();
+  static const Uuid _uuid = Uuid();
 
   /// Records a reading session.
   ///
@@ -273,7 +273,7 @@ class ReadingStatsService {
   /// Returns reading stats for a specific book.
   Future<List<ReadingStats>> getStatsForBook(String bookId) async {
     try {
-      return _db.getReadingStatsByBook(bookId);
+      return await _db.getReadingStatsByBook(bookId);
     } catch (e) {
       debugPrint('ReadingStatsService: getStatsForBook error: $e');
       return [];
@@ -284,7 +284,7 @@ class ReadingStatsService {
   Future<List<ReadingStats>> getStatsForDate(DateTime date) async {
     try {
       final dateStr = date.toIso8601String().substring(0, 10);
-      return _db.getReadingStatsByDate(dateStr);
+      return await _db.getReadingStatsByDate(dateStr);
     } catch (e) {
       debugPrint('ReadingStatsService: getStatsForDate error: $e');
       return [];

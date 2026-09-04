@@ -201,7 +201,7 @@ class LibraryProvider extends ChangeNotifier {
       // Check in-memory first
       final cached = _books.where((b) => b.id == id).toList();
       if (cached.isNotEmpty) return cached.first;
-      return _db.getBookById(id);
+      return await _db.getBookById(id);
     } catch (e) {
       debugPrint('LibraryProvider: getBookById error: $e');
       return null;

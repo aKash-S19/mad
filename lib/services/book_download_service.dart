@@ -17,7 +17,7 @@ import 'package:uuid/uuid.dart';
 
 class BookDownloadService {
   final Dio _dio = Dio();
-  static const Uuid _uuid = const Uuid();
+  static const Uuid _uuid = Uuid();
 
   /// Downloads a remote book file.
   ///

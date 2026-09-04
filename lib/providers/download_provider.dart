@@ -17,22 +17,22 @@ class DownloadProvider extends ChangeNotifier {
   final Dio _dio = Dio();
 
   /// Active downloads: bookId -> progress (0.0 to 1.0).
-  Map<String, double> _activeDownloads = {};
+  final Map<String, double> _activeDownloads = {};
   Map<String, double> get activeDownloads =>
       Map.unmodifiable(_activeDownloads);
 
   /// Queue of books waiting to download.
-  List<RemoteBook> _downloadQueue = [];
+  final List<RemoteBook> _downloadQueue = [];
   List<RemoteBook> get downloadQueue =>
       List.unmodifiable(_downloadQueue);
 
   /// Completed download book IDs.
-  List<String> _completedDownloads = [];
+  final List<String> _completedDownloads = [];
   List<String> get completedDownloads =>
       List.unmodifiable(_completedDownloads);
 
   /// Failed downloads: bookId -> error message.
-  Map<String, String> _failedDownloads = {};
+  final Map<String, String> _failedDownloads = {};
   Map<String, String> get failedDownloads =>
       Map.unmodifiable(_failedDownloads);
 

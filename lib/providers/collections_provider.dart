@@ -161,7 +161,7 @@ class CollectionsProvider extends ChangeNotifier {
       final cached =
           _collections.where((c) => c.id == id).toList();
       if (cached.isNotEmpty) return cached.first;
-      return _db.getCollectionById(id);
+      return await _db.getCollectionById(id);
     } catch (e) {
       _error = 'Failed to get collection: $e';
       debugPrint('CollectionsProvider: getCollectionById error: $e');

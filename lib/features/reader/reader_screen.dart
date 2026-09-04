@@ -11,7 +11,6 @@ library;
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
@@ -20,7 +19,6 @@ import 'package:uuid/uuid.dart';
 import 'package:libora/core/theme/reader_theme.dart' as rt;
 import 'package:libora/data/database/database_helper.dart';
 import 'package:libora/data/models/book_model.dart';
-import 'package:libora/data/models/bookmark_model.dart';
 import 'package:libora/data/models/chapter_model.dart';
 import 'package:libora/data/models/highlight_model.dart';
 import 'package:libora/data/models/note_model.dart';

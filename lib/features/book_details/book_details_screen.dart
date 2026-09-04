@@ -16,8 +16,10 @@ import 'package:libora/core/utils/file_utils.dart';
 import 'package:libora/data/database/database_helper.dart';
 import 'package:libora/data/models/book_model.dart';
 import 'package:libora/data/models/book_review_model.dart';
-import 'package:libora/data/models/bookmark_model.dart';
 import 'package:libora/data/models/chapter_model.dart';
+import 'package:libora/data/models/highlight_model.dart';
+import 'package:libora/data/models/note_model.dart';
+import 'package:libora/data/models/quote_model.dart';
 import 'package:libora/features/library/widgets/book_cover_widget.dart';
 import 'package:libora/providers/collections_provider.dart';
 import 'package:libora/providers/library_provider.dart';
@@ -45,7 +47,6 @@ class _BookDetailsScreenState extends State<BookDetailsScreen>
   List<Highlight> _highlights = [];
   List<Note> _notes = [];
   List<Quote> _quotes = [];
-  List<Bookmark> _bookmarks = [];
   List<Chapter> _chapters = [];
   List<BookReview> _reviews = [];
 
@@ -89,13 +90,11 @@ class _BookDetailsScreenState extends State<BookDetailsScreen>
         _db.getHighlightsByBook(book.id),
         _db.getNotesByBook(book.id),
         _db.getQuotesByBook(book.id),
-        _db.getBookmarksByBook(book.id),
       ]);
 
       _highlights = results[0] as List<Highlight>;
       _notes = results[1] as List<Note>;
       _quotes = results[2] as List<Quote>;
-      _bookmarks = results[3] as List<Bookmark>;
 
       // Load reviews
       final profile = context.read<ProfileProvider>();
