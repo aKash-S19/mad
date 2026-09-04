@@ -8,7 +8,6 @@ library;
 
 import 'dart:io';
 
-import 'package:archive/archive.dart';
 import 'package:epubx/epubx.dart';
 import 'package:flutter/foundation.dart';
 import 'package:libora/data/models/book_model.dart';
