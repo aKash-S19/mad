@@ -32,7 +32,7 @@ dependencies:
   epubx: ^4.0.0
   html: ^0.15.4
   # PDF viewing
-  syncfusion_flutter_pdfviewer: ^26.2.14
+  syncfusion_flutter_pdfviewer: ^34.2.6
 
   # Networking - for browsing/discovering books
   http: ^1.2.2
