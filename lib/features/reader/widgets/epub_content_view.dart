@@ -9,7 +9,6 @@ library;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/gestures.dart';
-import 'package:flutter/services.dart';
 import 'package:html/parser.dart' as html_parser;
 import 'package:html/dom.dart' as html_dom;
 import 'package:libora/core/theme/reader_theme.dart' as rt;
@@ -296,7 +295,7 @@ class _EpubContentViewState extends State<EpubContentView> {
       },
       child: SelectionArea(
         onSelectionChanged: (selection) {
-          _selectedText = selection.plainText;
+          _selectedText = selection?.plainText ?? '';
           if (_selectedText.isNotEmpty) {
             widget.onTextSelected?.call(_selectedText);
           }

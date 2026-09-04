@@ -12,7 +12,6 @@ import 'package:provider/provider.dart';
 import 'package:shimmer/shimmer.dart';
 
 import 'package:libora/core/router/app_router.dart';
-import 'package:libora/data/models/book_model.dart';
 import 'package:libora/data/models/remote_book_model.dart';
 import 'package:libora/providers/browse_provider.dart';
 import 'package:libora/providers/download_provider.dart';

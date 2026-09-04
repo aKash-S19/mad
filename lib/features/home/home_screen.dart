@@ -20,7 +20,6 @@ import 'package:shimmer/shimmer.dart';
 
 import 'package:libora/core/router/app_router.dart';
 import 'package:libora/data/models/book_model.dart';
-import 'package:libora/data/models/highlight_model.dart';
 import 'package:libora/providers/auth_provider.dart';
 import 'package:libora/providers/highlights_provider.dart';
 import 'package:libora/providers/library_provider.dart';
@@ -170,7 +169,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 horizontal: 16, vertical: 4),
                             child: RecentHighlightTile(
                               highlight: highlight,
-                              book: book,
                             ),
                           );
                         },

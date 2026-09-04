@@ -239,8 +239,8 @@ class QuotesProvider extends ChangeNotifier {
 /// Extension to add `firstOrNull` to Iterable.
 extension IterableFirstOrNull<T> on Iterable<T> {
   T? get firstOrNull {
-    final iterator = iterator;
-    if (iterator.moveNext()) return iterator.current;
+    final it = iterator;
+    if (it.moveNext()) return it.current;
     return null;
   }
 }

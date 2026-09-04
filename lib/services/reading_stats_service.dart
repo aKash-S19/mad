@@ -7,7 +7,6 @@ library;
 
 import 'package:flutter/foundation.dart';
 import 'package:libora/data/database/database_helper.dart';
-import 'package:libora/data/models/book_model.dart';
 import 'package:libora/data/models/reading_stats_model.dart';
 import 'package:uuid/uuid.dart';
 
@@ -252,7 +251,7 @@ class ReadingStatsService {
   Future<int> getTotalReadingTime() async {
     try {
       final allStats = await _db.getAllReadingStats();
-      return allStats.fold(
+      return allStats.fold<int>(
           0, (sum, s) => sum + s.readingTimeSeconds);
     } catch (e) {
       debugPrint('ReadingStatsService: getTotalReadingTime error: $e');
@@ -264,7 +263,7 @@ class ReadingStatsService {
   Future<int> getTotalPagesRead() async {
     try {
       final allStats = await _db.getAllReadingStats();
-      return allStats.fold(0, (sum, s) => sum + s.pagesRead);
+      return allStats.fold<int>(0, (sum, s) => sum + s.pagesRead);
     } catch (e) {
       debugPrint('ReadingStatsService: getTotalPagesRead error: $e');
       return 0;

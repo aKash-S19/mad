@@ -158,7 +158,6 @@ class _NoteEditorSheetState extends State<NoteEditorSheet> {
             textCapitalization: TextCapitalization.sentences,
             decoration: const InputDecoration(
               hintText: 'Write your thoughts...',
-              alignHintText: TextAlign.start,
             ),
           ),
           const SizedBox(height: 20),

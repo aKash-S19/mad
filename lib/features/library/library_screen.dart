@@ -17,7 +17,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../core/router/app_router.dart';
-import '../../data/models/book_model.dart';
 import '../../providers/library_provider.dart';
 import 'widgets/book_grid_card.dart';
 import 'widgets/book_list_tile.dart';

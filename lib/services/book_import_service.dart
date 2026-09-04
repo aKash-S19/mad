@@ -17,7 +17,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:uuid/uuid.dart';
 
 class BookImportService {
-  static const Uuid _uuid = const Uuid();
+  static const Uuid _uuid = Uuid();
 
   /// Imports a book file from the given [filePath].
   ///
@@ -139,24 +139,20 @@ class BookImportService {
       String filePath) async {
     try {
       final bytes = await File(filePath).readAsBytes();
-      final epubReader = EpubReader();
+      final epubBook = await EpubReader.readBook(bytes);
 
-      final epubBook = await epubReader.readBook(bytes);
+      final title = epubBook.Title;
+      final author = epubBook.Author;
+      final description = epubBook.Schema?.Package?.Description;
 
-      final title = epubBook.title;
-      final author = epubBook.author;
-      final description = epubBook.description;
-
-      // Count chapters from the spine
       int chapterCount = 0;
-      if (epubBook.content?.html != null) {
-        chapterCount = epubBook.content!.html!.length;
+      if (epubBook.Content?.Html != null) {
+        chapterCount = epubBook.Content?.Html?.length ?? 0;
       }
 
-      // Extract cover image
       List<int>? coverBytes;
-      if (epubBook.coverImage != null) {
-        coverBytes = epubBook.coverImage!.content;
+      if (epubBook.CoverImage != null) {
+        coverBytes = epubBook.CoverImage!.content;
       }
 
       return _EpubMetadata(
@@ -181,9 +177,8 @@ class BookImportService {
       String filePath) async {
     try {
       final bytes = await File(filePath).readAsBytes();
-      final epubReader = EpubReader();
-      final epubBook = await epubReader.readBook(bytes);
-      return epubBook.coverImage?.content;
+      final epubBook = await EpubReader.readBook(bytes);
+      return epubBook.CoverImage?.content;
     } catch (e) {
       debugPrint('BookImportService: extractEpubCover error: $e');
       return null;

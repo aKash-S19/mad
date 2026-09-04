@@ -77,6 +77,13 @@ class Validators {
     return null;
   }
 
+  static String? validateEmail(String? value) => emailValidator(value);
+
+  static String? validatePassword(String? value) => passwordValidator(value);
+
+  static String? validateName(String? value) =>
+      requiredValidator(value, fieldName: 'Name');
+
   /// Returns null if [value] is non-empty after trimming.
   static String? requiredValidator(String? value, {String fieldName = 'This field'}) {
     if (value == null || value.trim().isEmpty) {

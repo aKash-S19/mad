@@ -8,7 +8,6 @@ library;
 import 'package:flutter/foundation.dart';
 import 'package:libora/data/database/database_helper.dart';
 import 'package:libora/data/models/book_model.dart';
-import 'package:libora/data/models/remote_book_model.dart';
 import 'package:libora/services/book_import_service.dart';
 import 'package:uuid/uuid.dart';
 
@@ -411,8 +410,8 @@ class LibraryProvider extends ChangeNotifier {
 /// in all Dart SDK versions.
 extension IterableExtension<T> on Iterable<T> {
   T? get firstOrNull {
-    final iterator = iterator;
-    if (iterator.moveNext()) return iterator.current;
+    final it = iterator;
+    if (it.moveNext()) return it.current;
     return null;
   }
 }

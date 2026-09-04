@@ -10,7 +10,6 @@ import 'package:provider/provider.dart';
 import 'package:libora/core/router/app_router.dart';
 import 'package:libora/data/database/database_helper.dart';
 import 'package:libora/data/models/book_model.dart';
-import 'package:libora/data/models/quote_model.dart';
 import 'package:libora/providers/quotes_provider.dart';
 
 class QuotesScreen extends StatefulWidget {

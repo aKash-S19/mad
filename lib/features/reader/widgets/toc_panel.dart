@@ -6,7 +6,6 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:libora/core/utils/date_formatter.dart';
 import 'package:libora/data/models/chapter_model.dart';
 
 class TocPanel extends StatelessWidget {

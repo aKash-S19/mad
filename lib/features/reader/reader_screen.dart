@@ -40,7 +40,7 @@ import 'widgets/note_editor_sheet.dart';
 import 'widgets/reader_controls_bar.dart';
 import 'widgets/reader_settings_sheet.dart';
 import 'widgets/reader_top_bar.dart';
-import 'widgets/text_selection_toolbar.dart';
+import 'widgets/text_selection_toolbar.dart' as custom_toolbar;
 import 'widgets/toc_panel.dart';
 
 class ReaderScreen extends StatefulWidget {
@@ -543,7 +543,7 @@ class _ReaderScreenState extends State<ReaderScreen> {
               left: 20,
               right: 20,
               child: Center(
-                child: TextSelectionToolbar(
+                child: custom_toolbar.TextSelectionToolbar(
                   selectedText: _selectedText!,
                   onHighlight: _handleHighlight,
                   onNote: _handleNote,

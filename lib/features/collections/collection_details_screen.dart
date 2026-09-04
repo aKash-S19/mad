@@ -4,7 +4,6 @@ library;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:libora/core/router/app_router.dart';
 import 'package:libora/data/database/database_helper.dart';
 import 'package:libora/data/models/book_model.dart';
 import 'package:libora/data/models/collection_model.dart';
@@ -45,7 +44,7 @@ class _CollectionDetailsScreenState extends State<CollectionDetailsScreen> {
       final cp = context.read<CollectionsProvider>();
       final col = await cp.getCollectionById(widget.collectionId);
       final books =
-          await _db.getBooksForCollection(widget.collectionId);
+          await _db.getBooksByCollection(widget.collectionId);
 
       setState(() {
         _collection = col;
@@ -191,12 +190,6 @@ class _CollectionDetailsScreenState extends State<CollectionDetailsScreen> {
                     final book = _books[index];
                     return BookGridCard(
                       book: book,
-                      onTap: () {
-                        Navigator.of(context).pushNamed(
-                          AppRouter.bookDetails,
-                          arguments: book.id,
-                        );
-                      },
                     );
                   },
                 )
@@ -208,12 +201,6 @@ class _CollectionDetailsScreenState extends State<CollectionDetailsScreen> {
                     final book = _books[index];
                     return BookListTile(
                       book: book,
-                      onTap: () {
-                        Navigator.of(context).pushNamed(
-                          AppRouter.bookDetails,
-                          arguments: book.id,
-                        );
-                      },
                     );
                   },
                 ),

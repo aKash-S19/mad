@@ -7,7 +7,6 @@
 library;
 
 import 'package:flutter/material.dart';
-import 'package:libora/core/constants/app_constants.dart';
 
 class HighlightColorPicker extends StatefulWidget {
   /// The currently selected color (hex string, e.g. `#FFEB3B`).

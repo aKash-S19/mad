@@ -38,7 +38,7 @@ class EpubData {
 }
 
 class EpubParserService {
-  static const Uuid _uuid = const Uuid();
+  static const Uuid _uuid = Uuid();
 
   /// Parses an EPUB file and extracts all metadata and content.
   ///
@@ -47,28 +47,25 @@ class EpubParserService {
   static Future<EpubData> parseEpub(String filePath) async {
     try {
       final bytes = await File(filePath).readAsBytes();
-      final epubReader = EpubReader();
-      final epubBook = await epubReader.readBook(bytes);
+      final epubBook = await EpubReader.readBook(bytes);
 
-      // Extract chapters from the spine/nav
       final chapters = _extractChapters(epubBook);
 
-      // Save cover image to temp if available
       String? coverPath;
-      if (epubBook.coverImage != null) {
+      if (epubBook.CoverImage != null) {
         coverPath = await _saveCoverToTemp(
-          epubBook.coverImage!.content,
+          epubBook.CoverImage!.content!,
         );
       }
 
       return EpubData(
-        title: epubBook.title,
-        author: epubBook.author,
-        description: epubBook.description,
-        publisher: epubBook.publisher,
-        language: epubBook.language,
+        title: epubBook.Title,
+        author: epubBook.Author,
+        description: epubBook.Schema?.Package?.Description,
+        publisher: epubBook.Schema?.Package?.Publisher,
+        language: epubBook.Schema?.Package?.Language,
         chapters: chapters,
-        coverImageBytes: epubBook.coverImage?.content,
+        coverImageBytes: epubBook.CoverImage?.content,
         coverImagePath: coverPath,
       );
     } catch (e) {
@@ -81,8 +78,7 @@ class EpubParserService {
   static Future<List<Chapter>> getTOC(String filePath) async {
     try {
       final bytes = await File(filePath).readAsBytes();
-      final epubReader = EpubReader();
-      final epubBook = await epubReader.readBook(bytes);
+      final epubBook = await EpubReader.readBook(bytes);
       return _extractChapters(epubBook);
     } catch (e) {
       debugPrint('EpubParserService: getTOC error: $e');
@@ -96,28 +92,24 @@ class EpubParserService {
       String filePath, String chapterHref) async {
     try {
       final bytes = await File(filePath).readAsBytes();
-      final epubReader = EpubReader();
-      final epubBook = await epubReader.readBook(bytes);
+      final epubBook = await EpubReader.readBook(bytes);
 
-      // Look for the chapter content in the HTML files
-      final htmlFiles = epubBook.content?.html;
+      final htmlFiles = epubBook.Content?.Html;
       if (htmlFiles == null || htmlFiles.isEmpty) return '';
 
-      // Try to find a matching file by href
       for (final htmlFile in htmlFiles.entries) {
         final fileName = htmlFile.key;
         if (fileName.contains(chapterHref) ||
             chapterHref.contains(fileName)) {
-          return htmlFile.value.content ?? '';
+          return htmlFile.value.Content ?? '';
         }
       }
 
-      // If no exact match, try to find by the base filename
       final baseHref =
           chapterHref.split('#').first.split('/').last;
       for (final htmlFile in htmlFiles.entries) {
         if (htmlFile.key.contains(baseHref)) {
-          return htmlFile.value.content ?? '';
+          return htmlFile.value.Content ?? '';
         }
       }
 
@@ -133,9 +125,8 @@ class EpubParserService {
   static Future<List<int>?> extractCover(String filePath) async {
     try {
       final bytes = await File(filePath).readAsBytes();
-      final epubReader = EpubReader();
-      final epubBook = await epubReader.readBook(bytes);
-      return epubBook.coverImage?.content;
+      final epubBook = await EpubReader.readBook(bytes);
+      return epubBook.CoverImage?.content;
     } catch (e) {
       debugPrint('EpubParserService: extractCover error: $e');
       return null;
@@ -146,15 +137,14 @@ class EpubParserService {
   static Future<EpubData> extractMetadata(String filePath) async {
     try {
       final bytes = await File(filePath).readAsBytes();
-      final epubReader = EpubReader();
-      final epubBook = await epubReader.readBook(bytes);
+      final epubBook = await EpubReader.readBook(bytes);
 
       return EpubData(
-        title: epubBook.title,
-        author: epubBook.author,
-        description: epubBook.description,
-        publisher: epubBook.publisher,
-        language: epubBook.language,
+        title: epubBook.Title,
+        author: epubBook.Author,
+        description: epubBook.Schema?.Package?.Description,
+        publisher: epubBook.Schema?.Package?.Publisher,
+        language: epubBook.Schema?.Package?.Language,
       );
     } catch (e) {
       debugPrint('EpubParserService: extractMetadata error: $e');
@@ -162,52 +152,59 @@ class EpubParserService {
     }
   }
 
-  /// Extracts chapters from the EPUB's table of contents and spine.
   static List<Chapter> _extractChapters(EpubBook epubBook) {
     final chapters = <Chapter>[];
-    final nav = epubBook.content?.nav;
+    final epubChapters = epubBook.Chapters;
 
-    // Try to extract from the navigation document (EPUB 3)
-    if (nav != null) {
-      final navContent = nav.content ?? '';
-      final navChapters = _parseNavContent(navContent);
-      chapters.addAll(navChapters);
+    if (epubChapters != null && epubChapters.isNotEmpty) {
+      var order = 0;
+      _flattenChapters(epubChapters, chapters, order);
+      return chapters;
     }
 
-    // If no chapters found from nav, try the NCX (EPUB 2)
-    if (chapters.isEmpty) {
-      final ncx = epubBook.content?.ncx;
-      if (ncx != null) {
-        final ncxContent = ncx.content ?? '';
-        final ncxChapters = _parseNcxContent(ncxContent);
-        chapters.addAll(ncxChapters);
-      }
-    }
+    final htmlFiles = epubBook.Content?.Html;
+    if (htmlFiles != null && htmlFiles.isNotEmpty) {
+      var order = 0;
+      for (final entry in htmlFiles.entries) {
+        final fileName = entry.key;
+        final content = entry.value.Content ?? '';
+        final title = _extractTitleFromHtml(content) ??
+            _humanizeFileName(fileName);
 
-    // If still no chapters, create them from the HTML spine
-    if (chapters.isEmpty) {
-      final htmlFiles = epubBook.content?.html;
-      if (htmlFiles != null && htmlFiles.isNotEmpty) {
-        var order = 0;
-        for (final entry in htmlFiles.entries) {
-          final fileName = entry.key;
-          final content = entry.value.content ?? '';
-          final title = _extractTitleFromHtml(content) ??
-              _humanizeFileName(fileName);
-
-          chapters.add(Chapter(
-            id: _uuid.v4(),
-            title: title,
-            href: fileName,
-            order: order,
-            level: 0,
-          ));
-          order++;
-        }
+        chapters.add(Chapter(
+          id: _uuid.v4(),
+          title: title,
+          href: fileName,
+          order: order,
+          level: 0,
+        ));
+        order++;
       }
     }
 
     return chapters;
+  }
+
+  static void _flattenChapters(
+      List<dynamic> epubChapters, List<Chapter> chapters, int order) {
+    for (final ch in epubChapters) {
+      final title = ch.Title ?? 'Untitled';
+      final htmlContent = ch.HtmlContent ?? '';
+      final href = _uuid.v4();
+
+      chapters.add(Chapter(
+        id: _uuid.v4(),
+        title: title,
+        href: href,
+        order: order,
+        level: 0,
+      ));
+      order++;
+
+      if (ch.SubChapters != null && (ch.SubChapters as List).isNotEmpty) {
+        _flattenChapters(ch.SubChapters as List, chapters, order);
+      }
+    }
   }
 
   /// Parses EPUB 3 navigation (X)HTML content for chapter list.

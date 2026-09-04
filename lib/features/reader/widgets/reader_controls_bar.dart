@@ -52,7 +52,7 @@ class ReaderControlsBar extends StatelessWidget {
     final displayPage = currentPage + 1;
     final displayTotal = totalPages > 0 ? totalPages : 1;
     final sliderValue = totalPages > 0
-        ? (currentPage + 1).toDouble().clamp(1, totalPages.toDouble())
+        ? (currentPage + 1).toDouble().clamp(1.0, totalPages.toDouble()).toDouble()
         : 1.0;
 
     return AnimatedSlide(

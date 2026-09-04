@@ -18,17 +18,10 @@ import 'package:libora/data/models/book_model.dart';
 import 'package:libora/data/models/book_review_model.dart';
 import 'package:libora/data/models/bookmark_model.dart';
 import 'package:libora/data/models/chapter_model.dart';
-import 'package:libora/data/models/collection_model.dart';
-import 'package:libora/data/models/highlight_model.dart';
-import 'package:libora/data/models/note_model.dart';
-import 'package:libora/data/models/quote_model.dart';
 import 'package:libora/features/library/widgets/book_cover_widget.dart';
 import 'package:libora/providers/collections_provider.dart';
-import 'package:libora/providers/highlights_provider.dart';
 import 'package:libora/providers/library_provider.dart';
-import 'package:libora/providers/notes_provider.dart';
 import 'package:libora/providers/profile_provider.dart';
-import 'package:libora/providers/quotes_provider.dart';
 import 'package:libora/services/epub_parser_service.dart';
 
 class BookDetailsScreen extends StatefulWidget {
@@ -108,7 +101,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen>
       final profile = context.read<ProfileProvider>();
       _reviews = await profile.getReviewsForBook(book.id);
       if (_reviews.isNotEmpty) {
-        _userRating = _reviews.first.rating;
+        _userRating = _reviews.first.rating.toDouble();
         _reviewController.text = _reviews.first.reviewText;
       }
 
@@ -159,8 +152,9 @@ class _BookDetailsScreenState extends State<BookDetailsScreen>
       id: _reviews.isNotEmpty ? _reviews.first.id : _uuid.v4(),
       bookId: _book!.id,
       bookTitle: _book!.title,
-      author: _book!.author,
-      rating: _userRating,
+      bookAuthor: _book!.author,
+      userId: '',
+      rating: _userRating.toInt(),
       reviewText: text,
       createdAt: DateTime.now(),
       updatedAt: DateTime.now(),

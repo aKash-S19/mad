@@ -6,6 +6,7 @@
 library;
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:libora/core/constants/app_constants.dart';
 import 'package:libora/core/theme/reader_theme.dart' as rt;
 import 'package:libora/providers/settings_provider.dart';
