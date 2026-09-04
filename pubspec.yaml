@@ -29,7 +29,7 @@ dependencies:
 
   # Reading & Documents
   # EPUB reading via epubx + html parsing
-  epubx: ^4.0.2
+  epubx: ^4.0.0
   html: ^0.15.4
   # PDF viewing
   syncfusion_flutter_pdfviewer: ^26.2.14

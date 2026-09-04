@@ -268,7 +268,7 @@ class _SearchScreenState extends State<SearchScreen> {
       margin: const EdgeInsets.only(bottom: 8),
       child: ListTile(
         leading: const Icon(Icons.note_alt_outlined),
-        title: Text(n.noteText, maxLines: 2, overflow: TextOverflow.ellipsis),
+        title: Text(n.content, maxLines: 2, overflow: TextOverflow.ellipsis),
         subtitle: Text(
           'Passage: "${n.selectedText}" · p. ${n.page}',
           maxLines: 1,
@@ -297,7 +297,7 @@ class _SearchScreenState extends State<SearchScreen> {
       child: ListTile(
         leading: const Icon(Icons.shelves),
         title: Text(c.name),
-        subtitle: Text('${c.bookCount} books'),
+        subtitle: Text('${c.bookIds.length} books'),
         trailing: const Icon(Icons.chevron_right),
         onTap: () {
           Navigator.of(context).pushNamed(

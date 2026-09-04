@@ -223,7 +223,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen>
                       leading:
                           const Icon(Icons.collections_bookmark_outlined),
                       title: Text(col.name),
-                      subtitle: Text('${col.bookCount} books'),
+                      subtitle: Text('${col.bookIds.length} books'),
                       trailing: IconButton(
                         icon: const Icon(Icons.add_circle_outline),
                         onPressed: () async {
@@ -367,10 +367,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen>
                           child: ClipRRect(
                             borderRadius: BorderRadius.circular(12),
                             child: BookCoverWidget(
-                              coverPath: book.coverPath,
-                              coverUrl: book.coverUrl,
-                              title: book.title,
-                              author: book.author,
+                              book: book,
                               width: 120,
                               height: 180,
                             ),
@@ -820,7 +817,7 @@ class _BookDetailsScreenState extends State<BookDetailsScreen>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                n.noteText,
+                n.content,
                 style: theme.textTheme.bodyMedium?.copyWith(
                   fontWeight: FontWeight.w600,
                 ),

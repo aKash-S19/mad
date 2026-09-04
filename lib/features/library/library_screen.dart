@@ -114,7 +114,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
               floating: true,
               expandedHeight: 80,
               automaticallyImplyLeading: false,
-              backgroundColor: scheme.background,
+              backgroundColor: scheme.surface,
               surfaceTintColor: Colors.transparent,
               title: Text(
                 'Library',

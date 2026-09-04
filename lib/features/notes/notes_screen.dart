@@ -57,7 +57,7 @@ class _NotesScreenState extends State<NotesScreen> {
     final updatedText = await NoteEditorSheet.show(
       context,
       selectedText: note.selectedText,
-      initialContent: note.noteText,
+      initialContent: note.content,
       page: note.page,
       chapter: note.chapter,
     );
@@ -65,7 +65,7 @@ class _NotesScreenState extends State<NotesScreen> {
     if (updatedText != null && updatedText.trim().isNotEmpty && mounted) {
       await context.read<NotesProvider>().updateNote(
             note.copyWith(
-              noteText: updatedText.trim(),
+              content: updatedText.trim(),
               updatedAt: DateTime.now(),
             ),
           );
@@ -86,7 +86,7 @@ class _NotesScreenState extends State<NotesScreen> {
       final q = _searchController.text.toLowerCase();
       notes = notes
           .where((n) =>
-              n.noteText.toLowerCase().contains(q) ||
+              n.content.toLowerCase().contains(q) ||
               n.selectedText.toLowerCase().contains(q))
           .toList();
     }
@@ -241,7 +241,7 @@ class _NotesScreenState extends State<NotesScreen> {
 
                                   // Personal Note
                                   Text(
-                                    n.noteText,
+                                    n.content,
                                     style: theme.textTheme.bodyLarge?.copyWith(
                                       fontWeight: FontWeight.w600,
                                       height: 1.5,

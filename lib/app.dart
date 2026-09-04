@@ -24,9 +24,6 @@ class LiboraApp extends StatelessWidget {
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: settings.themeMode,
-      onGenerateRoute: AppRouter.generateRoute,
-      initialRoute: auth.isLoggedIn ? AppRouter.home : AppRouter.splash,
-      // Use a simple navigator approach for now
       home: const _RootWidget(),
     );
   }

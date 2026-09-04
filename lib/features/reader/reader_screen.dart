@@ -174,9 +174,9 @@ class _ReaderScreenState extends State<ReaderScreen> {
     });
 
     try {
-      final html = await EpubParserService.getChapterHtml(
+      final html = await EpubParserService.extractChapterContent(
         _book!.filePath!,
-        index,
+        _epubChapters[index].href,
       );
       setState(() {
         _currentChapterIndex = index;
@@ -285,7 +285,7 @@ class _ReaderScreenState extends State<ReaderScreen> {
         id: _uuid.v4(),
         bookId: _book!.id,
         selectedText: text,
-        noteText: noteContent.trim(),
+        content: noteContent.trim(),
         page: reader.currentPage + 1,
         chapter: _epubChapters.isNotEmpty &&
                 _currentChapterIndex < _epubChapters.length
@@ -388,25 +388,25 @@ class _ReaderScreenState extends State<ReaderScreen> {
     final settings = context.watch<SettingsProvider>();
     final reader = context.watch<ReaderProvider>();
     final themeColors =
-        rt.ReaderThemeColors.fromTheme(settings.readerTheme);
+        rt.ReaderTheme.forName(settings.readerTheme.name);
 
     if (_isLoading) {
       return Scaffold(
-        backgroundColor: themeColors.background,
+        backgroundColor: themeColors.backgroundColor,
         body: Center(
-          child: CircularProgressIndicator(color: themeColors.accent),
+          child: CircularProgressIndicator(color: themeColors.accentColor),
         ),
       );
     }
 
     if (_errorMessage != null || _book == null) {
       return Scaffold(
-        backgroundColor: themeColors.background,
+        backgroundColor: themeColors.backgroundColor,
         appBar: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0,
           leading: IconButton(
-            icon: Icon(Icons.arrow_back, color: themeColors.text),
+            icon: Icon(Icons.arrow_back, color: themeColors.textColor),
             onPressed: () => Navigator.of(context).pop(),
           ),
         ),
@@ -416,11 +416,11 @@ class _ReaderScreenState extends State<ReaderScreen> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(Icons.error_outline, size: 48, color: themeColors.text),
+                Icon(Icons.error_outline, size: 48, color: themeColors.textColor),
                 const SizedBox(height: 16),
                 Text(
                   _errorMessage ?? 'Unable to open book',
-                  style: TextStyle(color: themeColors.text, fontSize: 16),
+                  style: TextStyle(color: themeColors.textColor, fontSize: 16),
                   textAlign: TextAlign.center,
                 ),
                 const SizedBox(height: 24),
@@ -438,7 +438,7 @@ class _ReaderScreenState extends State<ReaderScreen> {
     final book = _book!;
 
     return Scaffold(
-      backgroundColor: themeColors.background,
+      backgroundColor: themeColors.backgroundColor,
       body: Stack(
         children: [
           // ── Reading Content View ──
@@ -486,8 +486,8 @@ class _ReaderScreenState extends State<ReaderScreen> {
                 );
               },
               onSettings: () => ReaderSettingsSheet.show(context),
-              backgroundColor: themeColors.surface,
-              foregroundColor: themeColors.text,
+              backgroundColor: themeColors.appBarColor,
+              foregroundColor: themeColors.textColor,
             ),
           ),
 
@@ -530,9 +530,9 @@ class _ReaderScreenState extends State<ReaderScreen> {
                 }
               },
               onSettings: () => ReaderSettingsSheet.show(context),
-              backgroundColor: themeColors.surface,
-              foregroundColor: themeColors.text,
-              accentColor: themeColors.accent,
+              backgroundColor: themeColors.appBarColor,
+              foregroundColor: themeColors.textColor,
+              accentColor: themeColors.accentColor,
             ),
           ),
 
@@ -581,9 +581,9 @@ class _ReaderScreenState extends State<ReaderScreen> {
                     _showTocPanel = false;
                   });
                 },
-                backgroundColor: themeColors.surface,
-                foregroundColor: themeColors.text,
-                accentColor: themeColors.accent,
+                backgroundColor: themeColors.appBarColor,
+                foregroundColor: themeColors.textColor,
+                accentColor: themeColors.accentColor,
               ),
             ),
 
@@ -615,9 +615,9 @@ class _ReaderScreenState extends State<ReaderScreen> {
                     _showBookmarksPanel = false;
                   });
                 },
-                backgroundColor: themeColors.surface,
-                foregroundColor: themeColors.text,
-                accentColor: themeColors.accent,
+                backgroundColor: themeColors.appBarColor,
+                foregroundColor: themeColors.textColor,
+                accentColor: themeColors.accentColor,
               ),
             ),
         ],
@@ -629,7 +629,7 @@ class _ReaderScreenState extends State<ReaderScreen> {
       SettingsProvider settings, rt.ReaderThemeColors themeColors) {
     if (_isLoadingChapter) {
       return Center(
-        child: CircularProgressIndicator(color: themeColors.accent),
+        child: CircularProgressIndicator(color: themeColors.accentColor),
       );
     }
 
@@ -676,12 +676,12 @@ class _ReaderScreenState extends State<ReaderScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.picture_as_pdf, size: 64, color: themeColors.text),
+              Icon(Icons.picture_as_pdf, size: 64, color: themeColors.textColor),
               const SizedBox(height: 16),
               Text(
                 book.title,
                 style: TextStyle(
-                  color: themeColors.text,
+                  color: themeColors.textColor,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
                 ),
@@ -690,12 +690,12 @@ class _ReaderScreenState extends State<ReaderScreen> {
               const SizedBox(height: 8),
               Text(
                 'by ${book.author}',
-                style: TextStyle(color: themeColors.textSecondary, fontSize: 16),
+                style: TextStyle(color: themeColors.textColor.withValues(alpha: 0.7), fontSize: 16),
               ),
               const SizedBox(height: 24),
               Text(
                 'PDF file not located on device storage.\nIf this was imported from a temporary directory, please re-import the file.',
-                style: TextStyle(color: themeColors.textSecondary, height: 1.5),
+                style: TextStyle(color: themeColors.textColor.withValues(alpha: 0.7), height: 1.5),
                 textAlign: TextAlign.center,
               ),
             ],

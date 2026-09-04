@@ -217,8 +217,8 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       colorScheme: scheme,
-      scaffoldBackgroundColor: scheme.background,
-      canvasColor: scheme.background,
+      scaffoldBackgroundColor: scheme.surface,
+      canvasColor: scheme.surface,
       textTheme: textTheme,
       splashFactory: InkRipple.splashFactory,
       visualDensity: VisualDensity.adaptivePlatformDensity,
@@ -228,7 +228,7 @@ class AppTheme {
         centerTitle: false,
         elevation: 0,
         scrolledUnderElevation: 0,
-        backgroundColor: scheme.background.withValues(alpha: 0.0),
+        backgroundColor: scheme.surface.withValues(alpha: 0.0),
         surfaceTintColor: Colors.transparent,
         foregroundColor: scheme.onSurface,
         titleTextStyle: textTheme.titleLarge?.copyWith(

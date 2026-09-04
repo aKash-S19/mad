@@ -234,8 +234,8 @@ class _CollectionsScreenState extends State<CollectionsScreen> {
                                 const TextStyle(fontWeight: FontWeight.bold)),
                         subtitle: Text(
                           col.description.isNotEmpty
-                              ? '${col.description}\n${col.bookCount} books'
-                              : '${col.bookCount} books',
+                              ? '${col.description}\n${col.bookIds.length} books'
+                              : '${col.bookIds.length} books',
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                         ),

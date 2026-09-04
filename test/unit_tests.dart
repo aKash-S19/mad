@@ -126,17 +126,17 @@ void main() {
 
   group('Reader Theme Tests', () {
     test('ReaderThemeColors generates correct colors for all themes', () {
-      final light = rt.ReaderThemeColors.fromTheme(ReaderTheme.light);
-      expect(light.background, isNotNull);
+      final light = rt.ReaderTheme.forName('light');
+      expect(light.backgroundColor, isNotNull);
 
-      final sepia = rt.ReaderThemeColors.fromTheme(ReaderTheme.sepia);
-      expect(sepia.background, isNotNull);
+      final sepia = rt.ReaderTheme.forName('sepia');
+      expect(sepia.backgroundColor, isNotNull);
 
-      final dark = rt.ReaderThemeColors.fromTheme(ReaderTheme.dark);
-      expect(dark.background, isNotNull);
+      final dark = rt.ReaderTheme.forName('dark');
+      expect(dark.backgroundColor, isNotNull);
 
-      final amoled = rt.ReaderThemeColors.fromTheme(ReaderTheme.amoled);
-      expect(amoled.background, const Color(0xFF000000));
+      final amoled = rt.ReaderTheme.forName('amoled');
+      expect(amoled.backgroundColor, const Color(0xFF000000));
     });
   });
 }
